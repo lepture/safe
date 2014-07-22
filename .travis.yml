@@ -10,11 +10,6 @@ python:
 script:
     - nosetests -s
 
-after_success:
-    - pip install coveralls
-    - coverage run --source=safe setup.py -q nosetests
-    - coveralls
-
 branches:
   only:
     - master
