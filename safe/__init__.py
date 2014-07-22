@@ -63,7 +63,7 @@ def _init_words():
         with open(filepath, 'rb') as f:
             for line in f.readlines():
                 name, freq = line.split()
-                WORDS[name.strip()] = int(freq.strip())
+                WORDS[to_unicode(name.strip())] = int(freq.strip())
 
         with open(cache_file, 'wb') as f:
             log.debug('Dump to cache file %s' % cache_file)
