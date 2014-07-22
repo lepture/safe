@@ -163,6 +163,6 @@ def safety(raw, length=6, freq=0):
         return Strength(3, 'password is too simple')
 
     if types > 2:
-        return Strength(20, 'good password')
+        return Strength(20, 'password is perfect with %d types' % types)
 
-    return Strength(10, 'usable password')
+    return Strength(10, 'password is good enough')

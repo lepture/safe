@@ -42,4 +42,4 @@ def test_medium():
 def test_strong():
     s = safe.safety('yhnolkuT.')
     assert s
-    assert 'good' in s.message
+    assert 'perfect' in s.message
