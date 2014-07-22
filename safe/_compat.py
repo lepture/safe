@@ -9,6 +9,10 @@
 
 
 import sys
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 if sys.version_info[0] == 3:
     unicode_type = str
@@ -16,6 +20,9 @@ if sys.version_info[0] == 3:
 else:
     unicode_type = unicode
     bytes_type = str
+
+
+__all__ = ['pickle', 'to_unicode']
 
 
 def to_unicode(value, encoding='utf-8'):

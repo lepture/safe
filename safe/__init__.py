@@ -8,16 +8,12 @@
     :copyright: (c) 2014 by Hsiaoming Yang
 """
 
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
 import re
 import logging
 import os.path
 import threading
 import tempfile
-from ._compat import to_unicode
+from ._compat import to_unicode, pickle
 
 __version__ = '0.1'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
@@ -136,7 +132,11 @@ class Strength(object):
 
 
 def safety(raw, length=6, freq=0):
-    """If the password is safe."""
+    """Check the safety level of the password.
+
+    :param raw: raw text password.
+    :param length: minimal length of the password.
+    """
     raw = to_unicode(raw)
 
     if len(raw) < length:
