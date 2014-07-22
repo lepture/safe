@@ -47,7 +47,9 @@ It's very simple to check the strength of a password::
     >>> strength = safe.safety('x*V-92Ba')
     >>> bool(strength)
     True
-    >>> s.level
-    20
+    >>> s.valid
+    True
+    >>> s.strength
+    'strong'
     >>> s.message
     'good password'
