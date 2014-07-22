@@ -109,26 +109,25 @@ def is_common_password(raw, freq=0):
 
 class Strength(object):
     """Measure the strength of a password."""
-    def __init__(self, level, message):
-        self.level = level
+    def __init__(self, valid, strength, message):
+        self.valid = valid
+        self.strength = strength
         self.message = message
 
     def __repr__(self):
-        if self.level < 0:
-            return 'terrible'
-        if self.level < 10:
-            return 'simple'
-        if self.level < 20:
-            return 'medium'
-        if self.level < 30:
-            return 'strong'
-        return 'unknown'
+        return self.strength
+
+    def __str__(self):
+        return self.message
+
+    def __unicode__(self):
+        return self.message
 
     def __nonzero__(self):
-        return self.level >= 10
+        return self.valid
 
     def __bool__(self):
-        return self.level >= 10
+        return self.valid
 
 
 def safety(raw, length=6, freq=0):
@@ -140,13 +139,13 @@ def safety(raw, length=6, freq=0):
     raw = to_unicode(raw)
 
     if len(raw) < length:
-        return Strength(-1, 'password is too short')
+        return Strength(False, 'terrible', 'password is too short')
 
     if is_asdf(raw) or is_by_step(raw):
-        return Strength(1, 'password has a pattern')
+        return Strength(False, 'simple', 'password has a pattern')
 
     if is_common_password(raw):
-        return Strength(2, 'password is too common')
+        return Strength(False, 'simple', 'password is too common')
 
     types = 0
 
@@ -163,9 +162,9 @@ def safety(raw, length=6, freq=0):
         types += 1
 
     if len(raw) < 8 and types < 2:
-        return Strength(3, 'password is too simple')
+        return Strength(True, 'simple', 'password is too simple')
 
     if types > 2:
-        return Strength(20, 'password is perfect with %d types' % types)
+        return Strength(True, 'strong', 'password is perfect')
 
-    return Strength(10, 'password is good enough')
+    return Strength(True, 'medium', 'password is good enough')
