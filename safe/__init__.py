@@ -131,6 +131,9 @@ class Strength(object):
     def __nonzero__(self):
         return self.level >= 10
 
+    def __bool__(self):
+        return self.level >= 10
+
 
 def safety(raw, length=6, freq=0):
     """If the password is safe."""
