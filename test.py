@@ -6,7 +6,7 @@ import safe
 def test_asdf():
     s = safe.safety('dfghjkl')
     assert not s
-    assert 'pattern' in s.message
+    assert 'pattern' in str(s)
 
 
 def test_step():
@@ -29,7 +29,7 @@ def test_short():
 
 def test_simple():
     s = safe.safety('yhnolku')
-    assert not s
+    assert s
     assert 'simple' in s.message
 
 
@@ -41,5 +41,5 @@ def test_medium():
 
 def test_strong():
     s = safe.safety('yhnolkuT.')
-    assert s
+    assert bool(s)
     assert 'perfect' in s.message
