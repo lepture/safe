@@ -12,6 +12,9 @@ Here is the API reference for mistune.
 .. autoclass:: Strength
    :members:
 
+.. autofunction:: is_asdf
+.. autofunction:: is_by_step
+.. autofunction:: is_common_password
 
 Changelog
 ----------

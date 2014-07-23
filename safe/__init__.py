@@ -108,7 +108,22 @@ def is_common_password(raw, freq=0):
 
 
 class Strength(object):
-    """Measure the strength of a password."""
+    """Measure the strength of a password.
+
+    Here are some common usages of strength::
+
+        >>> strength = Strength(True, 'strong', 'password is perfect')
+        >>> bool(strength)
+        True
+        >>> repr(strength)
+        'strong'
+        >>> str(strength)
+        'password is perfect'
+
+    :param valid: if the password is valid to use
+    :param strength: the strength level of the password
+    :param message: a message related to the password
+    """
     def __init__(self, valid, strength, message):
         self.valid = valid
         self.strength = strength
@@ -130,7 +145,7 @@ class Strength(object):
         return self.valid
 
 
-def safety(raw, length=6, freq=0):
+def safety(raw, length=4, freq=0):
     """Check the safety level of the password.
 
     :param raw: raw text password.
@@ -144,7 +159,7 @@ def safety(raw, length=6, freq=0):
     if is_asdf(raw) or is_by_step(raw):
         return Strength(False, 'simple', 'password has a pattern')
 
-    if is_common_password(raw):
+    if is_common_password(raw, freq=freq):
         return Strength(False, 'simple', 'password is too common')
 
     types = 0
