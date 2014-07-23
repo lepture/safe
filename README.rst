@@ -51,12 +51,12 @@ It's very simple to check the strength of a password::
     'strong'
     >>> str(strength)
     'password is perfect'
-    >>> s.valid
+    >>> strength.valid
     True
-    >>> s.strength
+    >>> strength.strength
     'strong'
-    >>> s.message
-    'password is perfect'
+    >>> strength.message
+    'good password'
 
 
 Other Implementations
