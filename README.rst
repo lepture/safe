@@ -47,9 +47,19 @@ It's very simple to check the strength of a password::
     >>> strength = safe.safety('x*V-92Ba')
     >>> bool(strength)
     True
+    >>> repr(strength)
+    'strong'
+    >>> str(strength)
+    'password is perfect'
     >>> s.valid
     True
     >>> s.strength
     'strong'
     >>> s.message
-    'good password'
+    'password is perfect'
+
+
+Other Implementations
+---------------------
+
+1. **JavaScript**: `lepture/safe.js <https://github.com/lepture/safe.js>`_

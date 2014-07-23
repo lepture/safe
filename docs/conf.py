@@ -102,7 +102,7 @@ html_theme = 'flask_small'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'index_logo': 'safe.svg',
+    'index_logo': 'safe.png',
     'index_logo_height': '350px',
     'github_fork': 'lepture/safe'
 }
