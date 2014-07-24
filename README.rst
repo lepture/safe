@@ -59,6 +59,12 @@ It's very simple to check the strength of a password::
     'good password'
 
 
+Environ Variables
+-----------------
+
+1. **PYTHON_SAFE_WORDS_CACHE**: cache words in this file, default is a tempfile
+2. **PYTHON_SAFE_WORDS_FILE**: words vocabulary file, default is the 10k top passwords
+
 Other Implementations
 ---------------------
 
