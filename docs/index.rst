@@ -3,7 +3,7 @@
 Developer Guide
 ---------------
 
-Here is the API reference for mistune.
+Here is the API reference for safe.
 
 .. module:: safe
 
@@ -19,9 +19,19 @@ Here is the API reference for mistune.
 Changelog
 ----------
 
-Here is the full history of mistune.
+Here is the full history of safe.
 
-Version 0.1.0
-~~~~~~~~~~~~~
+Version 0.2
+~~~~~~~~~~~
+
+Released on Jul 24, 2014
+
+1. Typo and bugfix
+2. API changes in :class:`Strength`
+3. Remove threading
+4. Add environment variable
+
+Version 0.1
+~~~~~~~~~~~
 
 First preview release.
