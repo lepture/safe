@@ -11,7 +11,6 @@
 import re
 import logging
 import os.path
-import threading
 import tempfile
 from ._compat import to_unicode, pickle
 
@@ -25,47 +24,42 @@ __all__ = [
 
 log = logging.getLogger('safe')
 
-WORD_LOCK = threading.RLock()
-WORDS = {}
-
 LOWER = re.compile(r'[a-z]')
 UPPER = re.compile(r'[A-Z]')
 NUMBER = re.compile(r'[0-9]')
 MARKS = re.compile(r'[^0-9a-zA-Z]')
 
 
-def _init_words():
-    global WORDS
-    with WORD_LOCK:
-        if WORDS:
-            return
+def _load_words():
+    _cache_file = os.environ.get(
+        'PYTHON_SAFE_WORDS_CACHE',
+        os.path.join(tempfile.gettempdir(), 'password.words.cache'),
+    )
 
-        cache_file = os.path.join(
-            tempfile.gettempdir(),
-            'password.words.cache'
-        )
+    if os.path.exists(_cache_file):
+        log.debug('Reading from cache file %s' % _cache_file)
+        try:
+            with open(_cache_file, 'rb') as f:
+                return pickle.load(f)
+        except:
+            pass
 
-        if os.path.exists(cache_file):
-            log.debug('Reading from cache file %s' % cache_file)
-            try:
-                with open(cache_file, 'rb') as f:
-                    WORDS = pickle.load(f)
-                    return
-            except:
-                pass
+    filepath = os.environ.get(
+        'PYTHON_SAFE_WORDS_FILE',
+        os.path.join(os.path.dirname(__file__), 'words.dat'),
+    )
+    words = {}
+    with open(filepath, 'rb') as f:
+        for line in f.readlines():
+            name, freq = line.split()
+            words[to_unicode(name.strip())] = int(freq.strip())
 
-        libdir = os.path.abspath(os.path.dirname(__file__))
-        filepath = os.path.join(libdir, 'words.dat')
-        with open(filepath, 'rb') as f:
-            for line in f.readlines():
-                name, freq = line.split()
-                WORDS[to_unicode(name.strip())] = int(freq.strip())
+    with open(_cache_file, 'wb') as f:
+        log.debug('Dump to cache file %s' % _cache_file)
+        pickle.dump(words, f)
+    return words
 
-        with open(cache_file, 'wb') as f:
-            log.debug('Dump to cache file %s' % cache_file)
-            pickle.dump(WORDS, f)
-
-
+WORDS = _load_words()
 ASDF = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
 
 
@@ -100,7 +94,6 @@ def is_common_password(raw, freq=0):
 
     10k top passwords: https://xato.net/passwords/more-top-worst-passwords/
     """
-    _init_words()
     frequent = WORDS.get(raw, 0)
     if freq:
         return frequent > freq
