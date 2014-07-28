@@ -31,9 +31,10 @@ MARKS = re.compile(r'[^0-9a-zA-Z]')
 
 
 def _load_words():
+    filename = 'safe-%s.words.cache' % __version__
     _cache_file = os.environ.get(
         'PYTHON_SAFE_WORDS_CACHE',
-        os.path.join(tempfile.gettempdir(), 'password.words.cache'),
+        os.path.join(tempfile.gettempdir(), filename),
     )
 
     if os.path.exists(_cache_file):
