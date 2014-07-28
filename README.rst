@@ -36,15 +36,15 @@ Usage
 It's very simple to check the strength of a password::
 
     >>> import safe
-    >>> safe.safety(1)
+    >>> safe.check(1)
     terrible
-    >>> safe.safety('password')
+    >>> safe.check('password')
     simpile
-    >>> safe.safety('is.safe')
+    >>> safe.check('is.safe')
     medium
-    >>> safe.safety('x*V-92Ba')
+    >>> safe.check('x*V-92Ba')
     strong
-    >>> strength = safe.safety('x*V-92Ba')
+    >>> strength = safe.check('x*V-92Ba')
     >>> bool(strength)
     True
     >>> repr(strength)

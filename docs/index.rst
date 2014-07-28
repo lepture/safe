@@ -7,7 +7,7 @@ Here is the API reference for safe.
 
 .. module:: safe
 
-.. autofunction:: safety
+.. autofunction:: check
 
 .. autoclass:: Strength
    :members:

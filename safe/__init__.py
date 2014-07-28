@@ -19,7 +19,7 @@ __author__ = 'Hsiaoming Yang <me@lepture.com>'
 
 __all__ = [
     'is_asdf', 'is_by_step', 'is_common_password',
-    'safety', 'Strength',
+    'check', 'Strength',
 ]
 
 log = logging.getLogger('safe')
@@ -138,7 +138,7 @@ class Strength(object):
         return self.valid
 
 
-def safety(raw, length=4, freq=0):
+def check(raw, length=4, freq=0):
     """Check the safety level of the password.
 
     :param raw: raw text password.
@@ -176,3 +176,7 @@ def safety(raw, length=4, freq=0):
         return Strength(True, 'strong', 'password is perfect')
 
     return Strength(True, 'medium', 'password is good enough')
+
+
+def safety(raw, length=4, freq=0):
+    return check(raw, length=4, freq=0)
