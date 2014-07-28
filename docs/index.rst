@@ -21,6 +21,14 @@ Changelog
 
 Here is the full history of safe.
 
+Version 0.3
+~~~~~~~~~~~
+
+Released on Jul 28, 2014
+
+1. API changes. Use :meth:`check` instead of safety.
+2. Cache file with a version number.
+
 Version 0.2
 ~~~~~~~~~~~
 
