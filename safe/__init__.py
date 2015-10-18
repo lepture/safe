@@ -14,7 +14,7 @@ import os.path
 import tempfile
 from ._compat import to_unicode, pickle
 
-__version__ = '0.3'
+__version__ = '0.4'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
 
 __all__ = [
@@ -28,6 +28,11 @@ LOWER = re.compile(r'[a-z]')
 UPPER = re.compile(r'[A-Z]')
 NUMBER = re.compile(r'[0-9]')
 MARKS = re.compile(r'[^0-9a-zA-Z]')
+
+TERRIBLE = 0
+SIMPLE = 1
+MEDIUM = 2
+STRONG = 3
 
 
 def _load_words():
@@ -139,13 +144,18 @@ class Strength(object):
         return self.valid
 
 
-def check(raw, length=4, freq=0):
+def check(raw, length=8, freq=0, min_types=3, level=STRONG):
     """Check the safety level of the password.
 
     :param raw: raw text password.
     :param length: minimal length of the password.
+    :param freq: minimum frequency.
+    :param min_types: minimum character family.
+    :param level: minimum level to validate a password.
     """
     raw = to_unicode(raw)
+    if level > STRONG:
+        level = STRONG
 
     if len(raw) < length:
         return Strength(False, 'terrible', 'password is too short')
@@ -171,13 +181,13 @@ def check(raw, length=4, freq=0):
         types += 1
 
     if len(raw) < 8 and types < 2:
-        return Strength(True, 'simple', 'password is too simple')
+        return Strength(level<=SIMPLE, 'simple', 'password is too simple')
 
-    if types > 2:
-        return Strength(True, 'strong', 'password is perfect')
+    if types <= min_types:
+        return Strength(level<=MEDIUM, 'medium', 'password is good enough, but not strong')
 
-    return Strength(True, 'medium', 'password is good enough')
+    return Strength(True, 'strong', 'password is perfect')
 
 
-def safety(raw, length=4, freq=0):
-    return check(raw, length=4, freq=0)
+def safety(raw, length=8, freq=0, min_types=2, level=STRONG):
+    return check(raw, length=8, freq=0, min_types=2, level=STRONG)
