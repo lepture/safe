@@ -183,7 +183,7 @@ def check(raw, length=8, freq=0, min_types=3, level=STRONG):
     if len(raw) < 8 and types < 2:
         return Strength(level<=SIMPLE, 'simple', 'password is too simple')
 
-    if types <= min_types:
+    if types < min_types:
         return Strength(level<=MEDIUM, 'medium', 'password is good enough, but not strong')
 
     return Strength(True, 'strong', 'password is perfect')
