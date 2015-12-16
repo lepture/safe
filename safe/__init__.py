@@ -75,9 +75,7 @@ def is_asdf(raw):
     reverse = raw[::-1]
     asdf = ''.join(ASDF)
 
-    if raw in asdf or reverse in asdf:
-        return True
-    return False
+    return raw in asdf or reverse in asdf
 
 
 def is_by_step(raw):
