@@ -75,11 +75,6 @@ def is_asdf(raw):
     reverse = raw[::-1]
     asdf = ''.join(ASDF)
 
-    if raw in asdf or reverse in asdf:
-        return True
-
-    asdf = ''.join(ASDF[::-1])
-
     return raw in asdf or reverse in asdf
 
 
