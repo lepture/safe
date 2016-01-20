@@ -40,7 +40,7 @@ It's very simple to check the strength of a password::
     terrible
     >>> safe.check('password')
     simpile
-    >>> safe.check('is.safe')
+    >>> safe.check('is.safe.password')
     medium
     >>> safe.check('x*V-92Ba')
     strong
@@ -56,7 +56,7 @@ It's very simple to check the strength of a password::
     >>> strength.strength
     'strong'
     >>> strength.message
-    'good password'
+    'password is perfect'
 
 
 Environ Variables
