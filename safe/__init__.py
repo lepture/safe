@@ -175,7 +175,7 @@ def check(raw, length=8, freq=0, min_types=3, level=STRONG):
     if MARKS.search(raw):
         types += 1
 
-    if len(raw) < 8 and types < 2:
+    if types < 2:
         return Strength(level<=SIMPLE, 'simple', 'password is too simple')
 
     if types < min_types:
