@@ -39,7 +39,7 @@ It's very simple to check the strength of a password::
     >>> safe.check(1)
     terrible
     >>> safe.check('password')
-    simpile
+    simple
     >>> safe.check('is.safe.password')
     medium
     >>> safe.check('x*V-92Ba')
