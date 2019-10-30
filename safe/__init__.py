@@ -35,20 +35,21 @@ MEDIUM = 2
 STRONG = 3
 
 
-def _load_words():
-    filename = 'safe-%s.words.cache' % __version__
-    _cache_file = os.environ.get(
-        'PYTHON_SAFE_WORDS_CACHE',
-        os.path.join(tempfile.gettempdir(), filename),
-    )
+def _load_words(cache_words=True):
+    if cache_words:
+        filename = 'safe-%s.words.cache' % __version__
+        _cache_file = os.environ.get(
+            'PYTHON_SAFE_WORDS_CACHE',
+            os.path.join(tempfile.gettempdir(), filename),
+        )
 
-    if os.path.exists(_cache_file):
-        log.debug('Reading from cache file %s' % _cache_file)
-        try:
-            with open(_cache_file, 'rb') as f:
-                return pickle.load(f)
-        except:
-            pass
+        if os.path.exists(_cache_file):
+            log.debug('Reading from cache file %s' % _cache_file)
+            try:
+                with open(_cache_file, 'rb') as f:
+                    return pickle.load(f)
+            except:
+                pass
 
     filepath = os.environ.get(
         'PYTHON_SAFE_WORDS_FILE',
@@ -59,13 +60,13 @@ def _load_words():
         for line in f.readlines():
             name, freq = line.split()
             words[to_unicode(name.strip())] = int(freq.strip())
-
-    with open(_cache_file, 'wb') as f:
-        log.debug('Dump to cache file %s' % _cache_file)
-        pickle.dump(words, f)
+    if cache_words:
+        with open(_cache_file, 'wb') as f:
+            log.debug('Dump to cache file %s' % _cache_file)
+            pickle.dump(words, f)
     return words
 
-WORDS = _load_words()
+WORDS = {}
 ASDF = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
 
 
@@ -90,11 +91,14 @@ def is_by_step(raw):
     return True
 
 
-def is_common_password(raw, freq=0):
+def is_common_password(raw, freq=0, cache_words=True):
     """If the password is common used.
 
     10k top passwords: https://xato.net/passwords/more-top-worst-passwords/
     """
+    global WORDS
+    if not WORDS:
+        WORDS = _load_words(cache_words)
     frequent = WORDS.get(raw, 0)
     if freq:
         return frequent > freq
@@ -139,7 +143,7 @@ class Strength(object):
         return self.valid
 
 
-def check(raw, length=8, freq=0, min_types=3, level=STRONG):
+def check(raw, length=8, freq=0, min_types=3, level=STRONG, cache_words=True):
     """Check the safety level of the password.
 
     :param raw: raw text password.
@@ -158,7 +162,7 @@ def check(raw, length=8, freq=0, min_types=3, level=STRONG):
     if is_asdf(raw) or is_by_step(raw):
         return Strength(False, 'simple', 'password has a pattern')
 
-    if is_common_password(raw, freq=freq):
+    if is_common_password(raw, freq=freq, cache_words=cache_words):
         return Strength(False, 'simple', 'password is too common')
 
     types = 0
