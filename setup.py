@@ -24,12 +24,12 @@ def fread(filename):
 
 
 setup(
-    name='Safe',
+    name='defasafe',
     version=safe.__version__,
     author=author,
     author_email=author_email,
     url='https://github.com/lepture/safe',
-    packages=["safe"],
+    packages=["defasafe"],
     description="Is your password safe?",
     zip_safe=False,
     include_package_data=True,
