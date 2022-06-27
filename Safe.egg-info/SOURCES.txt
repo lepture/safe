@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.rst
+setup.py
+Safe.egg-info/PKG-INFO
+Safe.egg-info/SOURCES.txt
+Safe.egg-info/dependency_links.txt
+Safe.egg-info/not-zip-safe
+Safe.egg-info/top_level.txt
+safe/__init__.py
+safe/_compat.py
+safe/words.dat
