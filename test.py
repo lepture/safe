@@ -4,7 +4,6 @@ import tempfile
 
 import safe
 
-
 def test_asdf():
     s = safe.check('dfghjkl', length=7)
     assert not s
