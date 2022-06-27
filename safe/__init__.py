@@ -14,7 +14,7 @@ import os.path
 import tempfile
 from ._compat import to_unicode, pickle
 
-__version__ = '0.4'
+__version__ = '0.5'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
 
 __all__ = [
@@ -159,7 +159,7 @@ def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=
     :param level: minimum level to validate a password.
     """
     raw = to_unicode(raw)
-    print(raw)
+    
     if level > STRONG:
         level = STRONG
 
@@ -191,8 +191,7 @@ def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=
     
     if len(NUMBER.findall(raw)) >= min_number:
         types += 2
-
-    print(types)  
+        
     # Find all the numbe ascending
     index = 2
     while index < len(raw):
