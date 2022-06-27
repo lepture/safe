@@ -49,8 +49,8 @@ copyright = u'2014, Hsiaoming Yang'
 # built documents.
 #
 # The short X.Y version.
-import safe
-version = safe.__version__
+import defa_safe
+version = defa_safe.__version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
