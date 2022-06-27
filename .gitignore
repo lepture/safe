@@ -1,8 +1,11 @@
+@@ -1,10 +1,8 @@
 *.pyc
 *.pyo
+*.egg-info
 __pycache__
 build
 develop-eggs
+dist
 eggs
 parts
 .DS_Store
