@@ -25,7 +25,7 @@ def fread(filename):
 
 setup(
     name='defa_safe',
-    version=defa_safe.__version__,
+    version= '0.5',
     author=author,
     author_email=author_email,
     url='https://github.com/lepture/safe',
