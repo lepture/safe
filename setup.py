@@ -31,7 +31,6 @@ setup(
     url='https://github.com/lepture/safe',
     packages=["defa_safe"],
     description="Is your password safe?",
-    zip_safe=False,
     include_package_data=True,
     platforms='any',
     long_description=fread('README.rst'),
