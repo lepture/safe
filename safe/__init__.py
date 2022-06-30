@@ -127,6 +127,7 @@ class Strength(object):
     :param strength: the strength level of the password
     :param message: a message related to the password
     """
+    
     def __init__(self, valid, level, strength, message):
         self.valid = valid
         self.level = level
@@ -164,13 +165,13 @@ def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=
         level = STRONG
 
     if len(raw) < length:
-        return Strength(False, 'terrible', 'password is too short')
+        return Strength(False, TERRIBLE, 'terrible', 'password is too short').__dict__
 
     if is_asdf(raw) or is_by_step(raw):
-        return Strength(False, 'simple', 'password has a pattern')
+        return Strength(False, SIMPLE, 'simple', 'password has a pattern').__dict__
 
     if is_common_password(raw, freq=freq, cache_words=cache_words):
-        return Strength(False, 'simple', 'password is too common')
+        return Strength(False, SIMPLE, 'simple', 'password is too common').__dict__
 
     types = 0
 
@@ -213,15 +214,15 @@ def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=
         index += 1  
     
     if types < 2:
-        return Strength(level <= SIMPLE, SIMPLE, 'simple', 'password is too simple')
+        return Strength(level <= SIMPLE, SIMPLE, 'simple', 'password is too simple').__dict__
 
     if types < min_types:
         return Strength(level <= MEDIUM, MEDIUM, 'medium',
-                        'password is good enough, but not strong')
+                        'password is good enough, but not strong').__dict__
 
-    if types > 5:
-        return Strength(True, VERYSTRONG, 'very strong', 'password is very perfect')
-    return Strength(True, STRONG, 'strong', 'password is perfect')
+    if types > 6:
+        return Strength(True, VERYSTRONG, 'very strong', 'password is very perfect').__dict__
+    return Strength(True, STRONG, 'strong', 'password is perfect').__dict__
 
 
 def safety(raw, length=8, freq=0, min_types=2, level=STRONG):
