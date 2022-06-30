@@ -1,3 +1,4 @@
+@@ -1,10 +1,8 @@
 *.pyc
 *.pyo
 *.egg-info
@@ -13,3 +14,4 @@ docs/_build
 cover/
 venv/
 .tox
+Env

@@ -14,7 +14,7 @@ import os.path
 import tempfile
 from ._compat import to_unicode, pickle
 
-__version__ = '0.4'
+__version__ = '0.5'
 __author__ = 'Hsiaoming Yang <me@lepture.com>'
 
 __all__ = [
@@ -28,11 +28,15 @@ LOWER = re.compile(r'[a-z]')
 UPPER = re.compile(r'[A-Z]')
 NUMBER = re.compile(r'[0-9]')
 MARKS = re.compile(r'[^0-9a-zA-Z]')
+SYMBOL = re.compile(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]')
+NUM_ASC = '01234567890'
+NUM_DESC = '09876543210'
 
 TERRIBLE = 0
 SIMPLE = 1
 MEDIUM = 2
 STRONG = 3
+VERYSTRONG = 4 
 
 
 def _load_words(cache_words=True):
@@ -110,7 +114,7 @@ class Strength(object):
 
     Here are some common usages of strength::
 
-        >>> strength = Strength(True, 'strong', 'password is perfect')
+        >>> strength = Strength(True, 3, 'strong', 'password is perfect')
         >>> bool(strength)
         True
         >>> repr(strength)
@@ -119,11 +123,14 @@ class Strength(object):
         'password is perfect'
 
     :param valid: if the password is valid to use
+    :param level: the level of the password
     :param strength: the strength level of the password
     :param message: a message related to the password
     """
-    def __init__(self, valid, strength, message):
+    
+    def __init__(self, valid, level, strength, message):
         self.valid = valid
+        self.level = level
         self.strength = strength
         self.message = message
 
@@ -143,7 +150,7 @@ class Strength(object):
         return self.valid
 
 
-def check(raw, length=8, freq=0, min_types=3, level=STRONG, cache_words=True):
+def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=STRONG, cache_words=True):
     """Check the safety level of the password.
 
     :param raw: raw text password.
@@ -153,17 +160,18 @@ def check(raw, length=8, freq=0, min_types=3, level=STRONG, cache_words=True):
     :param level: minimum level to validate a password.
     """
     raw = to_unicode(raw)
+    
     if level > STRONG:
         level = STRONG
 
     if len(raw) < length:
-        return Strength(False, 'terrible', 'password is too short')
+        return Strength(False, TERRIBLE, 'terrible', 'password is too short').__dict__
 
     if is_asdf(raw) or is_by_step(raw):
-        return Strength(False, 'simple', 'password has a pattern')
+        return Strength(False, SIMPLE, 'simple', 'password has a pattern').__dict__
 
     if is_common_password(raw, freq=freq, cache_words=cache_words):
-        return Strength(False, 'simple', 'password is too common')
+        return Strength(False, SIMPLE, 'simple', 'password is too common').__dict__
 
     types = 0
 
@@ -178,15 +186,43 @@ def check(raw, length=8, freq=0, min_types=3, level=STRONG, cache_words=True):
 
     if MARKS.search(raw):
         types += 1
+    
+    if len(MARKS.findall(raw)) >= min_symbol:
+        types += 2
+    
+    if len(NUMBER.findall(raw)) >= min_number:
+        types += 2
+        
+    # Find all the numbe ascending
+    index = 2
+    while index < len(raw):
+        temp_string = raw[index-2] + raw[index-1] + raw[index]
+        if NUM_ASC.find(temp_string) != -1:
+            types -= 1
+            break
+        
+        index += 1
 
+    # Find all the numbe descending
+    index = 2
+    while index < len(raw):
+        temp_string = raw[index-2] + raw[index-1] + raw[index]
+        if NUM_DESC.find(temp_string) != -1:
+            types -= 1
+            break
+        
+        index += 1  
+    
     if types < 2:
-        return Strength(level <= SIMPLE, 'simple', 'password is too simple')
+        return Strength(level <= SIMPLE, SIMPLE, 'simple', 'password is too simple').__dict__
 
     if types < min_types:
-        return Strength(level <= MEDIUM, 'medium',
-                        'password is good enough, but not strong')
+        return Strength(level <= MEDIUM, MEDIUM, 'medium',
+                        'password is good enough, but not strong').__dict__
 
-    return Strength(True, 'strong', 'password is perfect')
+    if types > 7:
+        return Strength(True, VERYSTRONG, 'very strong', 'password is very perfect').__dict__
+    return Strength(True, STRONG, 'strong', 'password is perfect').__dict__
 
 
 def safety(raw, length=8, freq=0, min_types=2, level=STRONG):
