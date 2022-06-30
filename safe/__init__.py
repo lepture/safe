@@ -220,7 +220,7 @@ def check(raw, length=8, freq=0, min_types=5, min_symbol=3, min_number=3, level=
         return Strength(level <= MEDIUM, MEDIUM, 'medium',
                         'password is good enough, but not strong').__dict__
 
-    if types > 6:
+    if types > 7:
         return Strength(True, VERYSTRONG, 'very strong', 'password is very perfect').__dict__
     return Strength(True, STRONG, 'strong', 'password is perfect').__dict__
 
